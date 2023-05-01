@@ -12,7 +12,7 @@ module SqsExtendedClient
           key: key,
           body: body,
         })
-        params[:body] = key
+        params[:message_body] = key
       end
 
       super
