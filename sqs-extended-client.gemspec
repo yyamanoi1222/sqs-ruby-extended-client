@@ -29,4 +29,5 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "aws-sdk-s3", '~> 1'
   spec.add_dependency "aws-sdk-sqs", '~> 1'
+  spec.add_dependency "nokogiri"
 end

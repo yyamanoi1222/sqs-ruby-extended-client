@@ -1,14 +1,14 @@
 module SqsExtendedClient
   class Configuration
     attr_accessor :bucket_name,
-                  :always_through
+                  :s3_client,
+                  :always_through,
+                  :threshhold
 
     def initialize
       @always_through = false
-    end
-
-    def s3_client
-      @s3_client ||= ::Aws::S3::Client.new
+      @threshhold = 1024 * 256
+      @s3_client = ::Aws::S3::Client.new
     end
   end
 

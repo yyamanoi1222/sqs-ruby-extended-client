@@ -1,4 +1,3 @@
-require 'aws-sdk-s3'
 require 'securerandom'
 
 module SqsExtendedClient
@@ -6,10 +5,10 @@ module SqsExtendedClient
     def send_message(params = {}, options = {})
       body = params[:message_body]
 
-      if _extended_client_configuration.always_through || _large?(body)
+      if __need_to_send_to_s3?(body)
         key = SecureRandom.uuid
-        _extended_client_configuration.s3_client.put_object({
-          bucket: _extended_client_configuration.bucket_name,
+        __extended_client_configuration.s3_client.put_object({
+          bucket: __extended_client_configuration.bucket_name,
           key: key,
           body: body,
         })
@@ -21,10 +20,10 @@ module SqsExtendedClient
 
     def send_message_batch(params = {}, options = {})
       params[:entries] = params[:entries].map do |entry|
-        if _extended_client_configuration.always_through || _large?
+        if __need_to_send_to_s3?(entry[:body])
           key = SecureRandom.uuid
-          _extended_client_configuration.s3_client.put_object({
-            bucket: _extended_client_configuration.bucket_name,
+          __extended_client_configuration.s3_client.put_object({
+            bucket: __extended_client_configuration.bucket_name,
             key: key,
             body: body,
           })
@@ -39,8 +38,8 @@ module SqsExtendedClient
     def receive_message(params = {}, options = {})
       resp = super
       resp.messages.map! do |message|
-        body = _extended_client_configuration.s3_client.get_object({
-          bucket: _extended_client_configuration.bucket_name,
+        body = __extended_client_configuration.s3_client.get_object({
+          bucket: __extended_client_configuration.bucket_name,
           key: message.body,
         })
         message.body = body
@@ -55,11 +54,15 @@ module SqsExtendedClient
 
     private
 
-    def _large?(body)
-      true
+    def __need_to_send_to_s3?(body)
+      __extended_client_configuration.always_through || __large?(body)
     end
 
-    def _extended_client_configuration
+    def __large?(body)
+      body.to_s.size > __extended_client_configuration.threshhold
+    end
+
+    def __extended_client_configuration
       SqsExtendedClient.configuration
     end
   end
