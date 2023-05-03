@@ -31,6 +31,7 @@ class SqsExtendedClientSendMessageTest < Minitest::Test
     body = @sqs.receive_message({
       queue_url: "http://localhost:9324/000000000000/test",
       max_number_of_messages: 1,
+      message_attribute_names: ["All"]
     }).messages.first.body
     assert_equal body, "test"
   end
@@ -43,11 +44,8 @@ class SqsExtendedClientSendMessageTest < Minitest::Test
     body = @sqs.receive_message({
       queue_url: "http://localhost:9324/000000000000/test",
       max_number_of_messages: 1,
+      message_attribute_names: ["All"]
     }).messages.first.body
-    obj = @s3.get_object({
-      bucket: 'test',
-      key: body
-    })
-    assert_equal obj.body.read, "test"*10000000
+    assert_equal body, "test"*10000000
   end
 end
