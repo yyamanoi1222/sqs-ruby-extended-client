@@ -1,22 +1,20 @@
-# Sqs::Ruby::Extended::Client
+# sqs-ruby-extended-client
+amazon-sqs-java-extended-client-lib written in ruby.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sqs/ruby/extended/client`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+https://github.com/awslabs/amazon-sqs-java-extended-client-lib
 
 ## Installation
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add sqs-ruby-extended-client
+    $ bundle add sqs-extended-client
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install sqs-ruby-extended-client
+    $ gem install sqs-extended-client
 
 ## Usage
 
-TODO: Write usage instructions here
 
 ## Development
 
@@ -26,4 +24,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sqs-ruby-extended-client.
+Bug reports and pull requests are welcome on GitHub at https://github.com/yyamanoi1222/sqs-ruby-extended-client.
