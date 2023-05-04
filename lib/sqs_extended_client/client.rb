@@ -16,7 +16,7 @@ module SqsExtendedClient
 
     def send_message_batch(params = {}, options = {})
       params[:entries] = params[:entries].map do |entry|
-        body = entry[:body]
+        body = entry[:message_body]
         if __need_to_send_to_s3?(body)
           key = __store_orig_body_to_s3(body)
           entry[:message_body] = __build_body(key)
@@ -48,6 +48,20 @@ module SqsExtendedClient
         params[:receipt_handle] = extracted_receipt_handle.original_receipt_handle
 
         __delete_body_from_s3(extracted_receipt_handle.message_body)
+      end
+
+      super
+    end
+
+    def delete_message_batch(params = {}, options = {})
+      params[:entries] = params[:entries].map do |entry|
+        if __embed_receipt_handle?(entry[:receipt_handle])
+          extracted_receipt_handle = __extract_original_receipt_handle(entry[:receipt_handle])
+          entry[:receipt_handle] = extracted_receipt_handle.original_receipt_handle
+
+          __delete_body_from_s3(extracted_receipt_handle.message_body)
+        end
+        entry
       end
 
       super
